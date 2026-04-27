@@ -1,1 +1,10 @@
 ./claude/
+.claude/
+
+# Du lieu & bieu do (khong commit len git)
+data/
+charts/
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+__pycache__/
