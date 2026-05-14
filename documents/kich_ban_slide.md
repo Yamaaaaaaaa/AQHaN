@@ -91,7 +91,19 @@
 
 ---
 
-## Slide 7: Phương pháp Học máy (Machine Learning)
+## Slide 7: Kiểm định Giả thuyết Thống kê
+- **Tiêu đề Slide:** Kiểm định Sự khác biệt Ô nhiễm Mùa Đông & Mùa Hè
+- **Nội dung hiển thị:**
+  - **Giả thuyết ($H_0$):** Ô nhiễm mùa đông = mùa hè.
+  - **Giả thuyết ($H_1$):** Ô nhiễm mùa đông > mùa hè.
+  - **Phương pháp:** Kiểm định T-test độc lập 2 mẫu (Independent T-test).
+  - **Kết quả:** p-value $\approx 0 < 0.05 \Rightarrow$ Bác bỏ $H_0$.
+  - **Kết luận:** Mùa đông ô nhiễm trầm trọng hơn mùa hè (có ý nghĩa thống kê).
+- **Lời thoại (Speaker Notes):** "Để những nhận định trực quan từ biểu đồ thêm phần chặt chẽ, nhóm đã tiến hành Kiểm định giả thuyết thống kê T-test cho hai nhóm dữ liệu: Mùa đông và Mùa hè. Kết quả p-value vô cùng nhỏ, gần như bằng 0, cho phép chúng ta tự tin bác bỏ giả thuyết H0 và khẳng định bằng toán học rằng: Nồng độ bụi mịn mùa đông thực sự cao hơn đáng kể so với mùa hè tại Bắc Kinh."
+
+---
+
+## Slide 8: Phương pháp Học máy (Machine Learning)
 - **Tiêu đề Slide:** Xây dựng Mô hình Thuật toán
 - **Nội dung hiển thị:**
   - **Mô hình 1: Linear Regression (Hồi quy tuyến tính)**
@@ -105,7 +117,7 @@
 
 ---
 
-## Slide 8: Đánh giá Hiệu năng Mô hình
+## Slide 9: Đánh giá Hiệu năng Mô hình
 - **Tiêu đề Slide:** Đánh giá & So sánh Kết quả
 - **Nội dung hiển thị:**
   - **Linear Regression:**
@@ -119,7 +131,7 @@
 
 ---
 
-## Slide 9: Các Yếu tố Quyết định (Feature Importance)
+## Slide 10: Các Yếu tố Quyết định (Feature Importance)
 - **Tiêu đề Slide:** Các yếu tố quyết định Ô nhiễm PM2.5
 - **Nội dung hiển thị:**
   - Random Forest tự động trích xuất mức độ quan trọng:
@@ -131,7 +143,7 @@
 
 ---
 
-## Slide 10: Kết luận & Hướng phát triển
+## Slide 11: Kết luận & Hướng phát triển
 - **Tiêu đề Slide:** Tổng kết & Khả năng Ứng dụng
 - **Nội dung hiển thị:**
   - **Kết luận:** Ngoại lai mang giá trị thông tin khổng lồ. Random Forest là thuật toán tối ưu nhất để cảnh báo thảm họa không khí.

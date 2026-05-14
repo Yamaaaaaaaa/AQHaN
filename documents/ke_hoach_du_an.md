@@ -37,9 +37,12 @@
     - Gộp các cột `year`, `month`, `day`, `hour` thành một cột kiểu `datetime` làm Index.
     - Mã hóa (Encoding) biến phân loại hướng gió (`wd`) sang dạng số học (ví dụ sử dụng One-Hot Encoding).
 
-## 6. Phân tích thống kê mô tả
-- Tính toán và hiển thị các đại lượng thống kê cơ bản: Trung bình (Mean), Trung vị (Median), Min, Max, Độ lệch chuẩn cho `PM2.5` và các biến độc lập.
-- Quan sát độ lệch (Skewness) để xem phân phối của mức PM2.5 có bị nghiêng mạnh (ví dụ nhiều ngày mức PM thấp và ít ngày mức PM cực cao) hay không.
+## 6. Phân tích thống kê và Kiểm định giả thuyết
+*(Đáp ứng Yêu cầu kỹ thuật: Ít nhất 01 giả thuyết thống kê đơn giản và kiểm định)*
+- **Thống kê mô tả:** Tính toán các đại lượng cơ bản (Mean, Median, Min, Max, Độ lệch chuẩn) cho `PM2.5` và các biến độc lập; quan sát độ lệch phân phối (Skewness).
+- **Kiểm định giả thuyết (Hypothesis Testing):**
+    - Đặt giả thuyết so sánh nồng độ PM2.5 giữa hai nhóm dữ liệu (ví dụ: Mùa đông vs Mùa hè).
+    - Áp dụng Kiểm định T-test độc lập 2 mẫu để xác định sự khác biệt có ý nghĩa thống kê hay không.
 
 ## 7. Phát hiện ngoại lai (Outlier Detection)
 *(Đáp ứng Yêu cầu kỹ thuật: Kiểm tra/phân tích ngoại lai)*

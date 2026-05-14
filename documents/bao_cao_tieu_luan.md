@@ -74,13 +74,30 @@ Tập dữ liệu đầu vào chứa toàn bộ các thông số môi trường 
   *(Trong đó $\mu$ là trung bình và $\sigma$ là độ lệch chuẩn của tập dữ liệu).*
 - **Triển khai:** Sử dụng `StandardScaler` của thư viện `scikit-learn` để chuẩn hóa toàn bộ tập `X_train` và `X_test` cho mô hình Linear Regression.
 
-## 6. Phân tích thống kê mô tả
+## 6. Phân tích thống kê và Kiểm định giả thuyết
+
+### 6.1. Thống kê mô tả
 - **Cơ sở lý thuyết:** Sử dụng các độ đo xu hướng tập trung (Mean, Median) và phân tán (Std, Min, Max) để có cái nhìn tổng quan về đặc tính phân phối của dữ liệu.
 - **Công thức:**
   - Trung bình (Mean): $\mu = \frac{1}{N} \sum_{i=1}^{N} x_i$
   - Phương sai (Variance): $\sigma^2 = \frac{1}{N-1} \sum_{i=1}^{N} (x_i - \mu)^2$
 - **Triển khai:** Do yêu cầu không sử dụng hàm `df.describe()`, một vòng lặp `for` duyệt qua từng cột số học đã được viết để tính toán thủ công từng đại lượng `mean(), median(), min(), max(), std()` và lưu vào một DataFrame thống kê.
 - **Kết quả:** Thống kê cho thấy PM2.5 có mức trung bình $\approx 82.5 \mu g/m^3$, nhưng giá trị lớn nhất (Max) lên tới $898 \mu g/m^3$. Độ lệch chuẩn $\sigma \approx 81.9$ cực lớn cho thấy sự biến động dữ dội của bụi mịn và sự tồn tại của các đợt ô nhiễm khốc liệt.
+
+### 6.2. Kiểm định giả thuyết thống kê (Hypothesis Testing)
+- **Mục tiêu:** Kiểm chứng bằng toán học xem liệu nồng độ PM2.5 vào mùa đông có thực sự cao hơn mùa hè hay không (so sánh hai nhóm dữ liệu).
+- **Thiết lập giả thuyết:**
+  - **Giả thuyết không ($H_0$):** Không có sự khác biệt về nồng độ PM2.5 trung bình giữa mùa đông và mùa hè ($\mu_{\text{đông}} = \mu_{\text{hè}}$).
+  - **Giả thuyết đối ($H_1$):** Nồng độ PM2.5 trung bình vào mùa đông cao hơn mùa hè ($\mu_{\text{đông}} > \mu_{\text{hè}}$).
+- **Phương pháp:** Sử dụng **Kiểm định T-test độc lập 2 mẫu (Independent Two-Sample T-test)**. Nhờ số lượng mẫu rất lớn ($N \gg 30$), theo Định lý Giới hạn Trung tâm (Central Limit Theorem), ta có thể áp dụng T-test một cách an toàn.
+- **Công thức T-statistic:**
+  $$ t = \frac{\bar{X}_1 - \bar{X}_2}{\sqrt{\frac{s_1^2}{n_1} + \frac{s_2^2}{n_2}}} $$
+  *(Trong đó: $\bar{X}_1, \bar{X}_2$ là giá trị trung bình; $s_1^2, s_2^2$ là phương sai; $n_1, n_2$ là kích thước mẫu của mùa đông và mùa hè).*
+- **Triển khai & Kết quả:**
+  - Lọc dữ liệu nhóm 1 (Mùa đông: tháng 12, 1, 2) và nhóm 2 (Mùa hè: tháng 6, 7, 8).
+  - Sử dụng hàm `scipy.stats.ttest_ind(winter_data, summer_data, equal_var=False)`.
+  - Kết quả trả về giá trị p-value cực kỳ nhỏ ($p \text{-value} \approx 0.0 < 0.05$).
+- **Kết luận:** Bác bỏ hoàn toàn giả thuyết $H_0$, chấp nhận giả thuyết $H_1$. Có đủ bằng chứng thống kê để kết luận rằng nồng độ bụi mịn PM2.5 vào mùa đông cao hơn đáng kể so với mùa hè tại trạm Aotizhongxin.
 
 ## 7. Phát hiện ngoại lai (Outliers)
 - **Cơ sở lý thuyết:** 
