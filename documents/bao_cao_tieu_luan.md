@@ -1,139 +1,182 @@
-# BÁO CÁO TIỂU LUẬN: PHÂN TÍCH VÀ DỰ ĐOÁN CHẤT LƯỢNG KHÔNG KHÍ (TẬP TRUNG VÀO BỤI MỊN PM2.5)
+# BÁO CÁO TIỂU LUẬN: MÔ HÌNH HỌC MÁY DỰ BÁO NỒNG ĐỘ BỤI MỊN PM2.5 TẠI TRẠM AOTIZHONGXIN
+
+**Học phần:** Nhập môn Khoa học Dữ liệu  
+**Dữ liệu sử dụng:** `Aotizhongxin_Raw.csv`  
+**Bài toán:** Hồi quy (Regression)
 
 ---
 
 ## 1. Giới thiệu bài toán thực tế
+**Về ô nhiễm không khí nói chung:**
+Ô nhiễm không khí, đặc biệt là sự gia tăng nồng độ bụi mịn PM2.5, đang là một trong những hiểm họa môi trường nguy hiểm nhất. Những hạt bụi này có đường kính cực nhỏ ($\le 2.5 \mu m$), có khả năng xâm nhập sâu vào hệ hô hấp và đi thẳng vào mạch máu, gây ra hàng loạt các bệnh lý nghiêm trọng về tim mạch, phổi và làm giảm tuổi thọ con người.
 
-**Tình trạng không khí trên thế giới:** Hiện nay, ô nhiễm không khí đang là một trong những thách thức môi trường và sức khỏe cộng đồng lớn nhất trên toàn cầu. Theo các báo cáo của Tổ chức Y tế Thế giới (WHO), có đến hơn 90% dân số thế giới đang phải hít thở bầu không khí chứa mức độ chất ô nhiễm cao vượt quá giới hạn an toàn. Sự gia tăng chóng mặt của các khu công nghiệp, cùng với mật độ phương tiện giao thông khổng lồ tại các siêu đô thị, đang giải phóng hàng triệu tấn khí thải độc hại và bụi mịn (đặc biệt là PM2.5) mỗi năm, gây ra các hệ lụy vô cùng nghiêm trọng cho sức khỏe hệ hô hấp của con người.
+**Tình trạng không khí trên thế giới:**
+Hiện nay, ô nhiễm không khí đang là một trong những thách thức môi trường và sức khỏe cộng đồng lớn nhất trên toàn cầu. Theo các báo cáo của Tổ chức Y tế Thế giới (WHO), có đến hơn 90% dân số thế giới đang phải hít thở bầu không khí chứa mức độ chất ô nhiễm cao vượt quá giới hạn an toàn. Sự gia tăng chóng mặt của các khu công nghiệp, cùng với mật độ phương tiện giao thông khổng lồ tại các siêu đô thị, đang giải phóng hàng triệu tấn khí thải độc hại và bụi mịn (đặc biệt là PM2.5) mỗi năm, gây ra các hệ lụy vô cùng nghiêm trọng cho sức khỏe hệ hô hấp của con người.
 
-**Tình trạng không khí tại Việt Nam:** Tại Việt Nam, đặc biệt là ở các thành phố lớn như Hà Nội và Thành phố Hồ Chí Minh, vấn đề ô nhiễm không khí cũng đang ở mức báo động đỏ. Tình trạng "sương mù quang hóa" và bụi mịn thường xuyên bao phủ vào các khung giờ cao điểm hoặc mùa khô nồm. Nguyên nhân chủ yếu đến từ mật độ phương tiện giao thông cá nhân quá cao, khói bụi từ các công trình xây dựng, cũng như hoạt động sản xuất chưa có hệ thống lọc khí thải đạt chuẩn. Việc liên tục xuất hiện trong các bảng xếp hạng ô nhiễm khu vực đòi hỏi những biện pháp giám sát chặt chẽ và khoa học hơn.
+**Tình trạng không khí tại Việt Nam:**
+Tại Việt Nam, đặc biệt là ở các thành phố lớn như Hà Nội và Thành phố Hồ Chí Minh, vấn đề ô nhiễm không khí cũng đang ở mức báo động đỏ. Tình trạng "sương mù quang hóa" và bụi mịn thường xuyên bao phủ vào các khung giờ cao điểm hoặc mùa khô nồm. Nguyên nhân chủ yếu đến từ mật độ phương tiện giao thông cá nhân quá cao, khói bụi từ các công trình xây dựng, cũng như hoạt động sản xuất chưa có hệ thống lọc khí thải đạt chuẩn. Việc liên tục xuất hiện trong các bảng xếp hạng ô nhiễm khu vực đòi hỏi những biện pháp giám sát chặt chẽ và khoa học hơn.
 
-**Giới thiệu bài toán:** Nhận thức được tính cấp thiết của vấn đề trên, bài toán đặt ra là ứng dụng Khoa học Dữ liệu (Data Science) để theo dõi, phân tích và đánh giá tình hình chất lượng không khí một cách khách quan, với sự tập trung đặc biệt vào hạt bụi siêu vi nguy hiểm PM2.5. Bằng cách khai phá dữ liệu từ hệ thống cảm biến đo lường nồng độ bụi và các loại khí xả, chúng ta có thể phân tích đặc tính dao động theo chu kỳ của không khí, và tìm ra mối tương quan giữa bụi PM2.5 với các loại khí thải khác. Từ đó, xây dựng thuật toán học máy (Machine Learning) để dự báo thông minh mức độ gia tăng của bụi mịn.
+**Bài toán đặt ra:**
+Nhận thức được tính cấp thiết của vấn đề trên, bài toán đặt ra là ứng dụng Khoa học Dữ liệu (Data Science) để theo dõi, phân tích và đánh giá tình hình chất lượng không khí một cách khách quan, với sự tập trung đặc biệt vào hạt bụi siêu vi nguy hiểm PM2.5. Bằng cách khai phá dữ liệu từ hệ thống cảm biến đo lường nồng độ bụi và các loại khí xả, chúng ta có thể phân tích đặc tính dao động theo chu kỳ của không khí, và tìm ra mối tương quan giữa bụi PM2.5 với các loại khí thải khác. Từ đó, xây dựng thuật toán học máy (Machine Learning) để dự báo thông minh mức độ gia tăng của bụi mịn.
+
+Lấy cảm hứng từ thực trạng trên, đồ án này sử dụng tập dữ liệu tại trạm quan trắc Aotizhongxin (Bắc Kinh - một trong những siêu đô thị từng ô nhiễm nhất thế giới) làm trường hợp nghiên cứu (Case study) điển hình. Dựa vào các thông số khí tượng (nhiệt độ, áp suất, độ ẩm, sức gió...) và nồng độ các chất ô nhiễm khác (SO2, NO2, CO, O3), bài toán yêu cầu xây dựng mô hình học máy để dự báo chính xác nồng độ bụi mịn PM2.5. Việc giải quyết bài toán này không chỉ hỗ trợ thiết lập hệ thống cảnh báo y tế sớm để bảo vệ sức khỏe cộng đồng ở các ngày "bão bụi", mà phương pháp học máy này còn hoàn toàn có thể ứng dụng trực tiếp vào việc dự báo tình trạng ô nhiễm không khí đang rất nhức nhối tại các thành phố lớn của Việt Nam hiện nay.
 
 ## 2. Mục tiêu và câu hỏi phân tích
-**Mục tiêu:**
-- Khám phá xu hướng thay đổi theo thời gian của bụi mịn PM2.5.
-- Trực quan hóa dữ liệu để tìm ra sự gắn kết giữa bụi mịn và các loại khí thải thông dụng.
-- Xây dựng mô hình học máy để dự báo nồng độ bụi PM2.5.
-
-**Câu hỏi phân tích:**
-1. Lượng bụi mịn PM2.5 có sự chênh lệch rõ rệt mang ý nghĩa thống kê giữa ban ngày (giờ hành chính/giao thông) và ban đêm hay không?
-2. Bụi mịn PM2.5 và bụi cỡ lớn PM10 có mối liên hệ sinh thái như thế nào?
-3. Các loại khí thải (CO, SO2, NO2, O3) ảnh hưởng thế nào đến hạt PM2.5? Có thể dùng chúng để dự đoán chính xác lượng PM2.5 thông qua một mô hình Hồi quy tuyến tính không?
+- **Mục tiêu tổng quát:** Áp dụng toàn diện quy trình Khoa học Dữ liệu (Data Science Pipeline) để trích xuất tri thức từ bộ dữ liệu thô. Các mục tiêu cụ thể bao gồm:
+  1. **Làm sạch và tiền xử lý dữ liệu:** Xử lý triệt để các giá trị khuyết thiếu bằng phương pháp nội suy, phát hiện và xử lý các điểm dữ liệu ngoại lai (outliers) nhằm chuẩn bị một tập dữ liệu chất lượng cao.
+  2. **Phân tích Khám phá Dữ liệu (EDA):** Sử dụng các kỹ thuật thống kê và trực quan hóa (biểu đồ) để tìm ra quy luật phân bố, tính chu kỳ và đo lường mức độ tương quan giữa các yếu tố khí hậu với sự biến động của PM2.5.
+  3. **Xây dựng Mô hình Học máy (Machine Learning):** Huấn luyện các thuật toán Hồi quy (Regression) từ cơ bản đến nâng cao để dự báo mức độ ô nhiễm, qua đó đánh giá độ tin cậy và trích xuất ra các đặc trưng quan trọng nhất (Feature Importance) quyết định nồng độ bụi mịn.
+- **Câu hỏi phân tích:**
+  1. Nồng độ PM2.5 có tính chu kỳ và thay đổi như thế nào theo thời gian (tháng/năm)?
+  2. Các yếu tố khí tượng (nhiệt độ, lượng mưa, tốc độ gió) tác động ra sao đến việc gia tăng hay suy giảm PM2.5?
+  3. Các loại khí thải công nghiệp/giao thông (CO, NO2, SO2) có mối tương quan như thế nào với bụi mịn?
 
 ## 3. Mô tả dữ liệu
-Bộ dữ liệu sử dụng là **Beijing Multi-Site Air-Quality Data Set** chứa các thông số đo lường chất lượng không khí theo từng giờ. Chỉ số PM2.5 (Particulate Matter) đại diện cho các hạt bụi mịn lơ lửng trong không khí có đường kính nhỏ hơn hoặc bằng 2.5 micromet. Do kích thước cực kỳ nhỏ, nó có khả năng xâm nhập sâu vào phổi và hệ máu, vì vậy PM2.5 thường được các cơ quan môi trường sử dụng làm thước đo chính để đánh giá mức độ ô nhiễm không khí.
-
-Để phục vụ chuyên sâu cho bài toán dự đoán, tập dữ liệu thô ban đầu đã được chọn lọc lại. Dưới đây là bảng mô tả chi tiết các trường dữ liệu (Data Dictionary) được giữ lại trong mô hình:
-
-| Tên Cột | Kiểu Dữ Liệu | Đơn vị tính | Mô tả chi tiết |
+Tập dữ liệu đầu vào chứa toàn bộ các thông số môi trường được quan trắc tại trạm Aotizhongxin trong giai đoạn 4 năm, kéo dài từ **ngày 01/03/2013 đến hết ngày 28/02/2017**. Dữ liệu được thu thập liên tục với tần suất **1 giờ/lần** (mỗi giờ hệ thống sẽ đo đạc và lưu lại 1 bản ghi mới). Tổng cộng, bộ dữ liệu bao gồm 35,064 bản ghi và 18 biến đặc trưng như sau:
+| Nhóm Đặc Trưng | Tên Biến | Ý Nghĩa / Mô Tả | Đơn vị / Phân loại |
 | :--- | :--- | :--- | :--- |
-| `Datetime` | Datetime | - | Trục thời gian chuẩn, được ghép lại từ các biến năm, tháng, ngày, giờ. |
-| `city` | String | - | Tên trạm quan trắc / Thành phố đo lường (VD: Aotizhongxin). |
-| `pm25` | Float | $\mu g/m^3$ | Nồng độ bụi siêu mịn có đường kính $\le 2.5\mu m$ (**Biến mục tiêu**). |
-| `pm10` | Float | $\mu g/m^3$ | Nồng độ bụi mịn có đường kính $\le 10\mu m$. |
-| `so2` | Float | $\mu g/m^3$ | Nồng độ khí Lưu huỳnh điôxít (Sinh ra từ đốt than, công nghiệp). |
-| `no2` | Float | $\mu g/m^3$ | Nồng độ khí Nitơ điôxít (Sinh ra chủ yếu từ khí thải xe cơ giới). |
-| `co` | Float | $\mu g/m^3$ | Nồng độ khí Cacbon monoxit (Khí độc sinh ra khi đốt cháy không hoàn toàn). |
-| `o3` | Float | $\mu g/m^3$ | Nồng độ khí Ozone ở mặt đất tầng đối lưu. |
+| **Thời gian** | `year`, `month`, `day`, `hour` | Thời điểm ghi nhận dữ liệu | Thời gian |
+| **Biến mục tiêu** | `PM2.5` | Nồng độ hạt bụi mịn (kích thước $\le 2.5 \mu m$) | $\mu g/m^3$ |
+| **Chất ô nhiễm** | `PM10` | Nồng độ hạt bụi (kích thước $\le 10 \mu m$) | $\mu g/m^3$ |
+| **Chất ô nhiễm** | `SO2` | Nồng độ Lưu huỳnh Đioxit | $\mu g/m^3$ |
+| **Chất ô nhiễm** | `NO2` | Nồng độ Nitơ Đioxit | $\mu g/m^3$ |
+| **Chất ô nhiễm** | `CO` | Nồng độ Carbon Monoxit | $\mu g/m^3$ |
+| **Chất ô nhiễm** | `O3` | Nồng độ Ozone | $\mu g/m^3$ |
+| **Khí tượng** | `TEMP` | Nhiệt độ môi trường | $^\circ C$ |
+| **Khí tượng** | `PRES` | Áp suất khí quyển | hPa |
+| **Khí tượng** | `DEWP` | Điểm sương (Dew Point) | $^\circ C$ |
+| **Khí tượng** | `RAIN` | Lượng mưa | mm |
+| **Khí tượng** | `wd` | Hướng gió | Biến phân loại |
+| **Khí tượng** | `WSPM` | Tốc độ gió | m/s |
 
-## 4. Thu thập dữ liệu / nguồn dữ liệu
-- **Nguồn cung cấp:** Dữ liệu bao gồm các thông số ô nhiễm không khí hàng giờ được lấy từ 12 trạm giám sát chất lượng không khí cấp quốc gia (trực thuộc Trung tâm Quan trắc Môi trường Thành phố Bắc Kinh). Thông số khí tượng tại từng trạm được đồng bộ và đối chiếu với trạm thời tiết gần nhất của Cục Khí tượng Trung Quốc.
-- **Khung thời gian:** Tập dữ liệu bao phủ liên tục trong 4 năm, từ ngày 01 tháng 03 năm 2013 đến ngày 28 tháng 02 năm 2017.
-- **Liên kết tải bộ dữ liệu:**
-  - Nguồn Kaggle: [Beijing Multisite Air-Quality Data Set](https://www.kaggle.com/datasets/sid321axn/beijing-multisite-airquality-data-set)
-  - Nguồn khoa học (gốc): [UCI Machine Learning Repository](https://archive.ics.uci.edu/ml/datasets/Beijing+Multi-Site+Air-Quality+Data)
-- **Trạng thái dự án:** Dữ liệu gốc hoàn toàn không bị chỉnh sửa trước khi nạp. Code sẽ đọc trực tiếp từ tệp `Aotizhongxin_Raw.csv` trên đĩa cục bộ thông qua thư viện Pandas.
-- **Trích dẫn nghiên cứu khoa học (Acknowledgements):** 
-  > Zhang, S., Guo, B., Dong, A., He, J., Xu, Z. and Chen, S.X. (2017). *Cautionary Tales on Air-Quality Improvement in Beijing*. Proceedings of the Royal Society A, Volume 473, No. 2205, Pages 20170457.
+## 4. Thu thập dữ liệu / Nguồn dữ liệu
+- **Nguồn dữ liệu:** Được lấy từ nền tảng Kaggle, bộ dữ liệu công khai "Beijing Multi-Site Air-Quality Data" (tổng hợp từ Đại học Bắc Kinh / UCI Machine Learning Repository).
+- **Đường dẫn (URL):** [https://www.kaggle.com/datasets/sid321axn/beijing-multisite-airquality-data-set](https://www.kaggle.com/datasets/sid321axn/beijing-multisite-airquality-data-set)
+- **Cách thức:** Tải trực tiếp dưới dạng tệp tin `Aotizhongxin_Raw.csv` chứa dữ liệu thô (raw data) và lưu trữ nguyên bản trên ổ đĩa nội bộ để tiến hành phân tích.
 
 ## 5. Làm sạch và tiền xử lý dữ liệu
-Trong Pipeline (`analysis_pipeline.ipynb`), bước làm sạch dữ liệu tuân thủ nghiêm ngặt các quy tắc học thuật để chuẩn bị dữ liệu thô. Quá trình bao gồm các bước cốt lõi:
-1. **Lọc dữ liệu trọng tâm:** Chỉ giữ lại 7 biến mục tiêu: `city`, `pm25`, `pm10`, `o3`, `no2`, `so2`, `co`.
-2. **Xử lý giá trị thiếu (Missing Values):** Thực tế quá trình thu thập dữ liệu luôn có sai sót. Giải pháp áp dụng:
-   - *Biến định danh (Categorical):* Cột `city` được nhóm các ô trống thành một giá trị cụ thể mang tên `Missing`.
-   - *Biến định lượng (Numeric):* Ước tính các giá trị còn thiếu bằng **Nội suy tuyến tính (Interpolate)** cho chuỗi thời gian liên tục. Đối với các dữ liệu khuyết thiếu ở hai đầu mút, thuật toán thay thế bằng giá trị **Trung vị (Median)**.
-3. **Co giãn và Chuẩn hoá dữ liệu:** Các thuộc tính không khí (bụi và khí) có thang đo khác biệt rất lớn (ví dụ CO có giá trị hàng ngàn). Phương pháp sử dụng là **Chuẩn hóa Z-score (Standardization)** với công thức $z = \frac{x - \mu}{\sigma}$. Dữ liệu được đẩy về trung bình $\mu=0$ và độ lệch chuẩn $\sigma=1$, đảm bảo mọi biến đầu vào đều bình đẳng trước khi Train.
-4. **Giảm chiều và biến đổi dữ liệu:** Áp dụng **Phân tích thành phần chính (PCA - Principal Component Analysis)** để nén cấu trúc 5 chiều dữ liệu (5 loại khí) xuống thành không gian **2 chiều (PC1 và PC2)** nhằm giảm thiểu độ phức tạp tính toán nhưng vẫn giữ lại tối đa tỷ lệ phương sai (Explained Variance Ratio) của hệ thống.
+
+### 5.1. Xử lý giá trị thiếu (Missing Values)
+- **Cơ sở lý thuyết:** Dữ liệu cảm biến đo theo thời gian thực thường bị khuyết (NaN) do sự cố máy móc. Với dữ liệu dạng chuỗi thời gian (Time-series), nếu xóa bỏ dòng bị thiếu sẽ làm gãy tính liên tục của thời gian. Phương pháp tối ưu là **Nội suy tuyến tính (Linear Interpolation)**.
+- **Công thức nội suy tuyến tính:** 
+  Dự đoán giá trị $y$ tại thời điểm $x$ dựa trên hai điểm liền kề $(x_1, y_1)$ và $(x_2, y_2)$:
+  $$ y = y_1 + (x - x_1) \frac{y_2 - y_1}{x_2 - x_1} $$
+- **Triển khai:** 
+  - Gộp 4 cột `year, month, day, hour` thành cột `datetime` và gán làm Index.
+  - Biến phân loại `wd` (hướng gió) có khuyết thiếu được điền bằng giá trị xuất hiện nhiều nhất (Mode).
+  - Các biến số (TEMP, PRES, PM2.5...) sử dụng hàm `df.interpolate(method='time')`.
+- **Kết quả:** Xử lý triệt để hàng ngàn giá trị khuyết (ví dụ: PM2.5 thiếu 925 dòng, CO thiếu 1776 dòng) đưa tập dữ liệu về trạng thái sạch (0 null) mà vẫn giữ được xu hướng tự nhiên.
+
+### 5.2. Chuẩn hóa dữ liệu (Feature Scaling)
+- **Cơ sở lý thuyết:** Các biến như Áp suất (PRES ~ 1000) và Tốc độ gió (WSPM ~ 1.5) có thang đo hoàn toàn khác biệt. Các mô hình dựa trên khoảng cách hoặc hồi quy tuyến tính sẽ bị hội tụ chậm và sai lệch nếu không chuẩn hóa.
+- **Công thức (Standard Scaler / Z-score Normalization):**
+  $$ z = \frac{x - \mu}{\sigma} $$
+  *(Trong đó $\mu$ là trung bình và $\sigma$ là độ lệch chuẩn của tập dữ liệu).*
+- **Triển khai:** Sử dụng `StandardScaler` của thư viện `scikit-learn` để chuẩn hóa toàn bộ tập `X_train` và `X_test` cho mô hình Linear Regression.
 
 ## 6. Phân tích thống kê mô tả
-- **Thống kê tổng quan:** Tính toán các chỉ số cốt lõi bao gồm Mean (Trung bình), Median (Trung vị), Std (Độ lệch chuẩn), Min, Max cho các loại khí và bụi để có cái nhìn bao quát về mức độ ô nhiễm.
-- **Kiểm định giả thuyết (Independent T-Test):** 
-  - *Mục đích:* So sánh mức độ bụi PM2.5 giữa ban ngày (06h-18h) và ban đêm (18h-06h).
-  - *Kết quả:* Dựa trên chỉ số T-statistic và P-value, nếu P-value < 0.05, ta bác bỏ giả thuyết H0 và khẳng định mức độ bụi mịn PM2.5 có sự chênh lệch rõ rệt mang ý nghĩa thống kê giữa ngày và đêm.
+- **Cơ sở lý thuyết:** Sử dụng các độ đo xu hướng tập trung (Mean, Median) và phân tán (Std, Min, Max) để có cái nhìn tổng quan về đặc tính phân phối của dữ liệu.
+- **Công thức:**
+  - Trung bình (Mean): $\mu = \frac{1}{N} \sum_{i=1}^{N} x_i$
+  - Phương sai (Variance): $\sigma^2 = \frac{1}{N-1} \sum_{i=1}^{N} (x_i - \mu)^2$
+- **Triển khai:** Do yêu cầu không sử dụng hàm `df.describe()`, một vòng lặp `for` duyệt qua từng cột số học đã được viết để tính toán thủ công từng đại lượng `mean(), median(), min(), max(), std()` và lưu vào một DataFrame thống kê.
+- **Kết quả:** Thống kê cho thấy PM2.5 có mức trung bình $\approx 82.5 \mu g/m^3$, nhưng giá trị lớn nhất (Max) lên tới $898 \mu g/m^3$. Độ lệch chuẩn $\sigma \approx 81.9$ cực lớn cho thấy sự biến động dữ dội của bụi mịn và sự tồn tại của các đợt ô nhiễm khốc liệt.
 
-## 7. Phát hiện ngoại lai
-Chương trình áp dụng đồng thời cả 2 phương pháp toán học để rà soát dữ liệu bất thường (Outliers - thường là các ngày có sự cố khói bụi cực đoan hoặc bão cát):
-- **Phương pháp sử dụng $\bar{x}$ và $s$:** Xác định giá trị ngoại lai là những quan sát không nằm trong khoảng $(\bar{x} - 3s, \bar{x} + 3s)$ (với $\bar{x}$ là trung bình mẫu, $s$ là độ lệch chuẩn mẫu).
-- **Phương pháp sử dụng Biểu đồ hộp (Boxplot):** Dựa trên khoảng tứ phân vị IQR. Các điểm quan sát rơi ra ngoài ranh giới $[Q1 - 1.5\times IQR, Q3 + 1.5\times IQR]$ được tự động thu thập và cảnh báo là các giá trị dị thường cần theo dõi.
+## 7. Phát hiện ngoại lai (Outliers)
+- **Cơ sở lý thuyết:** 
+  - **Khái niệm Ngoại lai (Outliers):** Ngoại lai là những điểm dữ liệu có giá trị chênh lệch một cách cực đoan (cao bất thường hoặc thấp bất thường) so với phần lớn các quan sát còn lại trong cùng một tập dữ liệu.
+  - **Vì sao cần phát hiện ngoại lai?** Ngoại lai có thể xuất phát từ sai số đo lường (như cảm biến lỗi) hoặc từ các sự kiện vật lý có thật nhưng hiếm gặp (như đợt bão bụi khốc liệt). Việc để lọt ngoại lai có thể làm méo mó nghiêm trọng các tham số thống kê cơ bản (như giá trị trung bình) và đặc biệt làm suy giảm hiệu năng của các mô hình học máy nhạy cảm với nhiễu (ví dụ: Hồi quy tuyến tính), do thuật toán sẽ cố gắng "bẻ cong" đường dự báo để khớp với các điểm bất thường này. Do đó, bước phát hiện ngoại lai là vô cùng quan trọng để hiểu đặc tính tập dữ liệu và quyết định phương pháp xử lý phù hợp nhằm tối ưu chất lượng mô hình.
+  - **Phương pháp sử dụng IQR:** Để định lượng và cô lập một cách toán học các điểm ngoại lai này, phương pháp trực quan và hiệu quả nhất là sử dụng biểu đồ Hộp (Boxplot) kết hợp với dải phân vị (Interquartile Range - IQR).
+- **Công thức IQR:**
+  $$ IQR = Q_3 - Q_1 $$
+  $$ \text{Upper Bound} = Q_3 + 1.5 \times IQR $$
+- **Triển khai:** 
+  Tính toán $Q_1 = 22.0$, $Q_3 = 114.0 \Rightarrow IQR = 92.0$.
+  Ngưỡng bất thường (Upper Bound) $= 114 + 1.5 \times 92 = 252.0 \mu g/m^3$.
+  Có $1,653$ bản ghi vượt ngưỡng này.
+- **Kết quả & Quyết định phân tách:** 
+  Do PM2.5 tăng vọt là **hiện tượng vật lý có thật** (Bão bụi mùa đông) chứ không phải do lỗi máy đo, việc xóa ngoại lai sẽ làm mô hình "mù" trước các đợt ô nhiễm nặng. Hệ quả là tập dữ liệu được tách thành hai phần:
+  1. **Tập loại bỏ ngoại lai ($PM2.5 \le 252.0$):** Dành để train mô hình Linear Regression (vốn nhạy cảm với nhiễu).
+  2. **Tập giữ nguyên ngoại lai:** Dành để train Random Forest (thuật toán miễn nhiễm với ngoại lai).
 
 ## 8. Trực quan hóa dữ liệu
-Bốn loại đồ thị được áp dụng để làm nổi bật các chiều thông tin:
-Dưới đây là chi tiết và nhận xét phân tích cho từng biểu đồ:
+- **Cơ sở lý thuyết:** Sử dụng đồ thị để nhận dạng xu hướng (Trend) và sự tương quan (Correlation) giữa các biến. 
+- **Công thức Hệ số tương quan Pearson:**
+  $$ r = \frac{\sum (x_i - \bar{x})(y_i - \bar{y})}{\sqrt{\sum (x_i - \bar{x})^2 \sum (y_i - \bar{y})^2}} $$
+- **Triển khai & Kết quả:**
+  1. **Line Chart (Biểu đồ đường):** Thể hiện xu hướng nồng độ PM2.5 trung bình theo từng tháng. Quan sát biểu đồ, ta thấy rõ tính chu kỳ biến động theo mùa: Các đỉnh ô nhiễm tồi tệ nhất (lên tới $140 - 150 \mu g/m^3$) luôn rơi vào các tháng mùa đông (quanh mốc tháng 1 hàng năm). Ngược lại, vào mùa hè (tháng 6 đến tháng 8), nồng độ PM2.5 chạm "đáy". Điều này phản ánh thực tế nhu cầu đốt than sưởi ấm gia tăng mạnh vào mùa đông tại Bắc Kinh, kết hợp với hiện tượng nghịch nhiệt độ làm giam giữ khói bụi ở tầm thấp.
+  2. **Scatter Plot (Biểu đồ phân tán):** Phân tích mối quan hệ giữa Nhiệt độ (`TEMP`) và nồng độ `PM2.5`. Biểu đồ biểu diễn một mây điểm tập trung rất dày đặc và vươn lên những đỉnh cực kỳ cao (có thể chạm tới $800-900 \mu g/m^3$) ở dải nhiệt độ thấp (từ $-10^\circ C$ đến $10^\circ C$). Ở chiều ngược lại, khi thời tiết nóng dần lên trên $20^\circ C$, nồng độ PM2.5 hiếm khi vượt quá $200 \mu g/m^3$. Điều này củng cố thêm nhận định rằng thời tiết giá rét tạo điều kiện cực kỳ thuận lợi cho sự tích tụ của hạt bụi mịn.
+  3. **Correlation Heatmap (Ma trận tương quan):** Thể hiện hệ số tương quan Pearson giữa toàn bộ các biến số học. 
+     - **Tương quan dương mạnh:** Nổi bật nhất là sự đồng biến rất cao giữa PM2.5 với PM10 ($r = 0.88$), CO ($r = 0.79$), và NO2 ($r = 0.68$). Bằng chứng này khẳng định bụi mịn và các khí thải này được sinh ra từ cùng một nguồn gốc phát thải (khí thải công nghiệp và phương tiện giao thông).
+     - **Tương quan âm:** Tốc độ gió (`WSPM`) có tương quan nghịch lớn nhất với PM2.5 ($r = -0.28$). Xét về mặt vật lý, gió càng mạnh thì bụi mịn càng dễ bị thổi bay và khuếch tán ra xa, giúp làm sạch không khí tại trạm đo.
 
-**1. Line Chart (Biểu đồ đường):** 
-- *Chi tiết:* Biểu diễn sự biến thiên nồng độ PM2.5 trung bình theo từng tháng (`resample('M')`) trên trục thời gian.
-- *Nhận xét:* Đồ thị cho thấy rõ tính chu kỳ (Seasonality) của ô nhiễm không khí. Nồng độ bụi mịn PM2.5 thường tăng vọt và đạt đỉnh vào các tháng mùa đông (từ tháng 11 đến tháng 2) do hiện tượng nghịch nhiệt, và giảm mạnh vào mùa hè do mưa nhiều giúp rửa trôi bụi bẩn.
+## 9. Xây dựng mô hình / Thuật toán
 
-**2. Scatter Plot (Biểu đồ phân tán):** 
-- *Chi tiết:* Rải điểm trên trục tọa độ, trục X là lượng bụi PM2.5, trục Y là bụi PM10.
-- *Nhận xét:* Quần thể điểm dữ liệu tạo thành một đường thẳng dốc lên hoàn hảo. Điều này chứng minh PM2.5 và PM10 có sự tương quan thuận (Positive Correlation) cực kỳ mạnh. Khi lượng bụi tổng tăng cao do khói bụi, bụi siêu vi PM2.5 cũng tăng theo tỷ lệ tương ứng.
+Trong đồ án này, chúng ta tiếp cận bài toán dự báo bằng hai phương pháp mang tính đối lập nhau để so sánh hiệu quả: một mô hình tham số cơ bản (Linear Regression) và một mô hình phi tham số phức tạp (Random Forest).
 
-**3. Histogram (Biểu đồ tần suất):** 
-- *Chi tiết:* Biểu đồ cột phân bố nồng độ bụi PM2.5. Trục X là mức độ bụi, trục Y là tần suất xuất hiện (số giờ đo).
-- *Nhận xét:* Phân bố của PM2.5 có dạng lệch phải (Right-skewed). Điều này phản ánh thực tế rằng trong phần lớn thời gian, nồng độ bụi nằm ở mức thấp (an toàn). Tuy nhiên, cái đuôi dài bên phải cho thấy thỉnh thoảng vẫn xuất hiện những "đợt" ô nhiễm ngắn hạn cực kỳ độc hại.
+### 9.1. Mô hình Hồi quy Tuyến tính (Linear Regression)
+- **Cơ sở lý thuyết:** Hồi quy tuyến tính là một thuật toán thống kê, giả định rằng tồn tại một mối quan hệ tuyến tính (đường thẳng hoặc siêu phẳng) giữa biến mục tiêu (PM2.5) và các biến đặc trưng đầu vào (Nhiệt độ, CO, Tốc độ gió,...). Thuật toán này sử dụng phương pháp **Bình phương tối thiểu thông thường (Ordinary Least Squares - OLS)**, cố gắng tìm ra một siêu phẳng sao cho tổng bình phương của các sai số (khoảng cách từ các điểm dữ liệu thực tế đến mặt phẳng dự báo) là nhỏ nhất.
+- **Ưu và nhược điểm:** 
+  - *Ưu điểm:* Thuật toán rất đơn giản, tốc độ huấn luyện nhanh và có tính diễn giải cao (hiểu rõ tác động của từng biến qua các hệ số trọng số).
+  - *Nhược điểm:* Bị giới hạn bởi giả định quan hệ tuyến tính. Đặc biệt, phương pháp OLS cực kỳ nhạy cảm với các điểm ngoại lai (Outliers); một vài điểm nhiễu có độ lệch lớn có thể kéo lệch toàn bộ đường hồi quy làm sai số mô hình tăng vọt.
+- **Công thức:** 
+  $$ \hat{y} = w_0 + w_1 x_1 + w_2 x_2 + ... + w_n x_n $$
+  *(Trong đó: $\hat{y}$ là giá trị dự báo, $w_0$ là hệ số chênh lệch/intercept, $w_1...w_n$ là các trọng số tương ứng với từng đặc trưng $x_1...x_n$)*
+- **Triển khai:** 
+  - Trước tiên, toàn bộ dữ liệu đầu vào được chuẩn hóa bằng `StandardScaler` để đưa các biến có thang đo hoàn toàn khác biệt (như Áp suất $\sim 1000$ hPa và Lượng mưa $\sim 0$ mm) về cùng một phân phối chuẩn, giúp hàm mục tiêu hội tụ mượt mà và chính xác.
+  - Sau đó, mô hình được huấn luyện (Train) **chỉ trên Tập dữ liệu đã xóa ngoại lai** ($PM2.5 \le 252.0 \mu g/m^3$) nhằm đảm bảo mặt phẳng hồi quy không bị bóp méo bởi các đợt bão bụi dị biệt.
 
-**4. Boxplot (Biểu đồ hộp):** 
-- *Chi tiết:* Đồ thị thể hiện các mức phân vị (Q1, Median, Q3) và các điểm dữ liệu ngoại lai của toàn bộ 5 chỉ số khí/bụi.
-- *Nhận xét:* Trung vị của các khí đều nằm ở nửa dưới của hộp. Các điểm chấm đen (Outliers) xuất hiện dày đặc ở râu phía trên hộp của PM2.5 và PM10, xác nhận rằng thành phố liên tục phải hứng chịu những trận "bão khói bụi" với nồng độ dị thường vượt xa quy chuẩn hàng ngày.
-
-## 9. Xây dựng mô hình / thuật toán (Hồi quy tuyến tính)
-
-### 9.1. Tổng quan về mô hình Hồi quy tuyến tính
-Hồi quy tuyến tính đa biến (Multiple Linear Regression) là một thuật toán Học máy có giám sát (Supervised Learning) mạnh mẽ trong việc dự báo. Nhiệm vụ của mô hình là thiết lập một mối quan hệ tuyến tính (đường thẳng/siêu phẳng) tối ưu nhất giữa một biến phụ thuộc (Biến mục tiêu $Y$) và nhiều biến độc lập (Biến dự báo $X$). 
-
-**Công thức toán học:**
-Mô hình giả định rằng giá trị của biến mục tiêu $Y$ được tính bằng tổ hợp tuyến tính của các biến đầu vào $X_i$ theo công thức:
-$$ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + ... + \beta_n X_n + \epsilon $$
-Trong đó:
-- $Y$: Biến mục tiêu cần dự báo (Nồng độ PM2.5).
-- $X_1, X_2, ..., X_n$: Các biến độc lập (Nồng độ `pm10`, `o3`, `no2`, `so2`, `co`).
-- $\beta_0$: Hệ số tự do (Intercept).
-- $\beta_1, \beta_2, ..., \beta_n$: Trọng số hồi quy (Coefficients). Chúng thể hiện mức độ tác động của từng biến $X$ lên $Y$. Thuật toán sẽ dùng phương pháp Bình phương tối thiểu (OLS) để tìm bộ trọng số $\beta$ này sao cho sai số dự đoán là nhỏ nhất.
-- $\epsilon$: Sai số ngẫu nhiên (Error term).
-
-*Cơ sở khoa học về việc chọn biến X:* Việc dùng khí thải để tính ra bụi PM2.5 hoàn toàn dựa trên cơ chế vật lý (PM2.5 là thành phần của PM10), cơ chế sinh hạt thứ cấp trong khí quyển (SO2 và NO2 kết tinh thành bụi mịn dưới ánh sáng), và sự cộng sinh phát thải (CO sinh ra khi kẹt xe đi kèm khói bụi).
-
-### 9.2. Mục tiêu của mô hình
-- Dự báo chính xác nồng độ hạt bụi siêu vi nguy hiểm `pm25`.
-- Tìm ra bảng Trọng số tác động $\beta$ để biết chính xác loại khí xả nào (`co`, `so2` hay `no2`...) có tầm ảnh hưởng lớn nhất đến sự hình thành của bụi PM2.5, từ đó cung cấp căn cứ để bảo vệ môi trường.
-
-### 9.3. Triển khai thuật toán
-1. **Tiền xử lý:** Các dữ liệu được nạp vào đều là dữ liệu đã trải qua làm sạch, lọc Missing Value và chuẩn hóa Z-score.
-2. **Chia tách dữ liệu (Train/Test Split):** Toàn bộ dữ liệu được xáo trộn ngẫu nhiên và cắt thành 2 phần độc lập:
-   - Tập huấn luyện (Train set - 80%): Máy tính sử dụng phần này để tự động học hỏi và tìm ra siêu phẳng tối ưu (tính $\beta$).
-   - Tập kiểm thử (Test set - 20%): Dùng để chạy thử nghiệm và kiểm tra xem máy dự đoán có chính xác trên dữ liệu mới không.
-3. **Huấn luyện (Fitting):** Khởi tạo `LinearRegression()` và truyền tập Train vào để khớp thuật toán.
-4. **Dự đoán (Predicting):** Mô hình xuất ra các con số PM2.5 dự đoán cho tập Test.
-
-### 9.4. Đánh giá mô hình
-Hệ thống sử dụng các hàm toán học sau để chấm điểm độ sai lệch của mô hình:
-- **MSE (Mean Squared Error):** Tính trung bình bình phương khoảng cách giữa giá trị thực tế và dự đoán. MSE càng nhỏ, mô hình càng chính xác. Việc bình phương giúp phóng đại và trừng phạt nặng các điểm dự báo sai số quá lớn.
-- **MAE (Mean Absolute Error):** Tính sai số tuyệt đối trung bình. Cung cấp con số trực quan rằng mô hình đang dự báo chênh lệch bao nhiêu $\mu g/m^3$ bụi.
-- **R-squared ($R^2$ Score):** Thể hiện phần trăm sự biến thiên của bụi PM2.5 được giải thích bởi các khí thải đầu vào. $R^2$ càng gần 1, mô hình càng sát với thực tế.
+### 9.2. Mô hình Rừng Ngẫu nhiên (Random Forest Regressor)
+- **Cơ sở lý thuyết:** Random Forest là một thuật toán **Học tập tập hợp (Ensemble Learning)** vô cùng mạnh mẽ. Thay vì chỉ phụ thuộc vào một mô hình duy nhất, nó xây dựng một "khu rừng" bao gồm hàng trăm **Cây quyết định (Decision Trees)** hoạt động độc lập. Thuật toán này ứng dụng kỹ thuật **Bagging (Bootstrap Aggregating)**, nghĩa là mỗi cây quyết định sẽ được huấn luyện trên một tập con dữ liệu lấy mẫu ngẫu nhiên (có hoàn lại) và một tập con các đặc trưng ngẫu nhiên. Khi dự báo, kết quả cuối cùng sẽ được tổng hợp lại từ tất cả các cây trong rừng đó.
+- **Ưu và nhược điểm:**
+  - *Ưu điểm:* Khả năng nắm bắt các mối quan hệ phi tuyến tính vô cùng phức tạp. Vì bản chất của cây quyết định là chia cắt không gian (splitting) dựa trên các ngưỡng, thuật toán này hoàn toàn **không cần bước chuẩn hóa dữ liệu (Scaling)** và **vô cùng miễn nhiễm (robust) trước các nhiễu hay điểm ngoại lai**. Ngoài ra, nó cung cấp sẵn thuộc tính Feature Importance để trích xuất độ quan trọng của từng biến.
+  - *Nhược điểm:* Tốn nhiều tài nguyên RAM và thời gian huấn luyện hơn, đồng thời mang tính "hộp đen" (Black-box) nên rất khó diễn giải logic bên trong hơn Linear Regression.
+- **Công thức:** Kết quả dự báo là trung bình cộng giá trị dự báo của $K$ cây quyết định:
+  $$ \hat{y} = \frac{1}{K} \sum_{k=1}^{K} f_k(x) $$
+- **Triển khai:** Khác biệt hoàn toàn với mô hình Hồi quy tuyến tính, Random Forest được đưa vào huấn luyện trên **Tập dữ liệu gốc (giữ nguyên 100% các điểm ngoại lai)**. Thuật toán được thiết lập tham số `n_estimators=100` (xây dựng 100 cây quyết định độc lập). Chiến lược triển khai này dựa trên các lập luận sau:
+  1. **Bản chất của ngoại lai trong bài toán:** Nồng độ PM2.5 tăng đột biến lên mức hàng trăm $\mu g/m^3$ không phải là lỗi cảm biến, mà là các thảm họa môi trường có thật (như bão bụi, nghịch nhiệt mùa đông). Nếu xóa bỏ chúng, mô hình sẽ hoàn toàn "mù" trước các ngày ô nhiễm nặng nhất - thời điểm mà hệ thống cảnh báo y tế cần phát huy tác dụng nhất.
+  2. **Cơ chế cô lập ngoại lai:** Nhờ nguyên lý chia nhánh (splitting) thay vì cố khớp một phương trình liên tục, các cây quyết định trong Random Forest sẽ tự động phân lập các điểm ô nhiễm cực đoan này vào những "nút lá" (leaf nodes) sâu riêng biệt, dựa trên các điều kiện thời tiết đặc thù lúc đó (ví dụ: nhiệt độ cực thấp kết hợp gió lặng). Nhờ đó, sự tồn tại của ngoại lai không hề làm kéo lệch (skew) hay méo mó dự báo của mô hình ở những ngày không khí trong lành.
+  3. **Sức mạnh của số đông (`n_estimators=100`):** Việc tạo ra 100 cây quyết định trên các bộ dữ liệu lấy mẫu ngẫu nhiên (Bagging) giúp thuật toán triệt tiêu hiện tượng học vẹt (Overfitting). Trong khu rừng này, một số cây sẽ chuyên học quy luật của ngày bình thường, trong khi một số cây khác (do vô tình lấy mẫu trúng nhiều điểm ngoại lai) sẽ trở thành "chuyên gia" nhận diện bão bụi. Khi lấy trung bình cộng dự báo của cả 100 cây, ta thu được một mô hình có bức tranh toàn cảnh: vừa cực kỳ ổn định, vừa có sức mạnh nội tại để dự báo chính xác các đỉnh ô nhiễm tồi tệ nhất.
 
 ## 10. Đánh giá kết quả
-Dựa trên các chỉ số mô tả ở phần 9.4, kết quả chạy thực tế của thuật toán Hồi quy tuyến tính được ghi nhận như sau:
-- **Độ đo sai số thực tế:** Chỉ số MSE và MAE đều ở mức tương đối thấp, đặc biệt hệ số $R^2$ đạt mức vô cùng ấn tượng. Điều này chứng tỏ thuật toán Hồi quy tuyến tính chạy cực kỳ tốt cho bài toán môi trường này.
-- **Trực quan hóa mức độ chính xác:** Hệ thống in ra biểu đồ Scatter trực quan so sánh Thực tế vs Dự đoán. Các điểm chấm bám sát một cách hoàn hảo lấy đường phân giác nét đứt màu đỏ ($y=x$), khẳng định mô hình dự đoán ra con số cực kỳ bám sát thực tế chứ không bị lệch pha.
-- **Phân tích Hệ số tác động (Coefficients):** Dựa vào bảng phân tích $\beta$, `pm10` có trọng số tác động cao nhất, theo sau là `co` và `no2`. Nó xác nhận thực tế rằng giao thông ùn tắc (sinh ra khí CO) chính là nguyên nhân lớn nhất làm gia tăng bụi mịn tại khu vực thành thị.
+Do đây là bài toán Hồi quy (Regression) nhằm dự báo một biến số liên tục (nồng độ PM2.5), chúng thực tế không thể sử dụng độ đo Accuracy (Độ chính xác) như trong bài toán Phân lớp. Thay vào đó, mô hình được đánh giá thông qua 4 độ đo chuyên dụng sau:
+
+### 10.1. Mean Absolute Error (MAE) - Sai số tuyệt đối trung bình
+- **Ý nghĩa:** MAE đo lường khoảng cách sai lệch trung bình giữa giá trị dự báo của mô hình và giá trị thực tế. Đơn vị của MAE cùng với đơn vị của biến mục tiêu ($\mu g/m^3$). MAE càng nhỏ chứng tỏ mô hình dự báo càng sát với thực tế. Điểm đặc trưng của MAE là nó đối xử công bằng với tất cả các sai số (không phạt nặng sai số lớn).
+- **Công thức:**
+  $$ MAE = \frac{1}{N} \sum_{i=1}^{N} |y_i - \hat{y}_i| $$
+
+### 10.2. Mean Squared Error (MSE) - Sai số toàn phương trung bình
+- **Ý nghĩa:** MSE đo lường trung bình của bình phương các sai số. Việc bình phương này khiến cho các sai số lớn bị khuếch đại lên rất nhiều, do đó mô hình sẽ bị "phạt nặng" nếu có những dự báo trượt quá xa thực tế. Điểm yếu của MSE là đơn vị của nó cũng bị bình phương (ví dụ: $(\mu g/m^3)^2$), khiến nó khó diễn giải trực tiếp so với biến gốc.
+- **Công thức:**
+  $$ MSE = \frac{1}{N} \sum_{i=1}^{N} (y_i - \hat{y}_i)^2 $$
+
+### 10.3. Root Mean Squared Error (RMSE) - Căn bậc hai sai số toàn phương trung bình
+- **Ý nghĩa:** RMSE chính là căn bậc hai của MSE. Việc lấy căn bậc hai giúp đưa đơn vị của sai số về lại cùng hệ quy chiếu với biến mục tiêu ($\mu g/m^3$), giúp ta dễ hình dung mức độ sai lệch hơn. Tương tự MSE, RMSE cũng trừng phạt nặng các dự đoán sai lệch lớn. Việc so sánh giữa RMSE và MAE giúp ta biết được liệu mô hình có đang mắc phải những sai số cực đoan hay không.
+- **Công thức:**
+  $$ RMSE = \sqrt{\frac{1}{N} \sum_{i=1}^{N} (y_i - \hat{y}_i)^2} $$
+
+### 10.4. R-squared ($R^2$) - Hệ số xác định
+- **Ý nghĩa:** Khác với MAE, MSE và RMSE (nhằm đo lường sai số), $R^2$ đo lường mức độ "vừa vặn" (goodness-of-fit) của mô hình. Cụ thể, nó thể hiện bao nhiêu phần trăm sự biến thiên của biến mục tiêu (PM2.5) có thể được giải thích bởi các biến đầu vào. $R^2$ có giá trị tối đa là 1 (hoặc 100%), giá trị càng tiến gần về 1 chứng tỏ mô hình hoạt động càng xuất sắc.
+- **Công thức:**
+  $$ R^2 = 1 - \frac{\sum (y_i - \hat{y}_i)^2}{\sum (y_i - \bar{y})^2} $$
+  *(Trong đó: $y_i$ là giá trị thực, $\hat{y}_i$ là giá trị dự báo, và $\bar{y}$ là giá trị trung bình của toàn bộ dữ liệu thực tế).*
+
+### 10.5. Triển khai & Kết quả
+Dựa trên việc đánh giá tập thử nghiệm (Test set), ta thu được các kết quả cụ thể như sau:
+
+- **Linear Regression (Huấn luyện trên tập KHÔNG có ngoại lai):**
+  - **Kết quả:** $MAE = 16.3358$, $MSE = 524.0252$, $RMSE = 22.8916$, $R^2 = 0.8454$
+  - **Nhận xét:** Mặc dù đã cố tình loại bỏ các điểm nhiễu lớn để ưu ái cho đường hồi quy, hệ số $R^2$ chỉ dừng lại ở mức $0.8454$. Sự chênh lệch đáng kể giữa MAE ($16.3$) và RMSE ($22.8$) cho thấy dù phần lớn dự báo bám sát thực tế, nhưng thỉnh thoảng mô hình vẫn mắc phải những sai số khá cao. Nguyên nhân cốt lõi là do mối quan hệ giữa các yếu tố thời tiết và hạt bụi mịn thực chất mang tính chất phi tuyến tính phức tạp, vượt qua giới hạn năng lực nội suy của một phương trình đường thẳng đơn giản.
+
+- **Random Forest Regressor (Huấn luyện trên tập CÓ chứa ngoại lai):**
+  - **Kết quả:** $MAE = 13.4999$, $MSE = 476.9945$, $RMSE = 21.8402$, $R^2 = 0.9318$
+  - **Nhận xét:** Bất chấp việc phải đối mặt với một tập dữ liệu thô chứa đầy các đợt bão bụi kỷ lục, Rừng Ngẫu Nhiên đã chứng tỏ hiệu năng vượt trội một cách rõ rệt. $R^2$ vọt lên $0.9318$ chứng tỏ mô hình giải thích được tới hơn 93% sự biến thiên phức tạp của dữ liệu. Sai số tuyệt đối MAE được ép xuống mức rất thấp ($13.49$), và MSE/RMSE đều cải thiện đáng kể so với mô hình Linear Regression. Điều này khẳng định sức mạnh của thuật toán Ensemble trong việc "bắt bài" các đỉnh ô nhiễm cực đoan mà không để chúng phá hỏng bức tranh tổng thể.
+  - **Feature Importance (Tầm quan trọng của đặc trưng):** Biểu đồ Barplot trích xuất từ mô hình chỉ ra một cách áp đảo rằng hạt bụi to **PM10** (đóng góp tới $\sim 80\%$ quyết định) chính là "chỉ báo" dự báo PM2.5 mạnh mẽ nhất. Xếp ở vị trí thứ hai là nồng độ khí **CO** ($\sim 12\%$). Về phía yếu tố khí tượng, yếu tố quan trọng nhất ảnh hưởng trực tiếp đến quá trình tích tụ bụi mịn trong không khí chính là **DEWP (Điểm sương)**. 
 
 ## 11. Kết luận và hướng phát triển
-**Kết luận:**
-- Toàn bộ Pipeline phân tích từ dữ liệu thô ra dữ liệu sạch, có biểu đồ đã hoạt động hoàn hảo. 
-- Tìm ra được sự thật rằng ô nhiễm bụi mịn PM2.5 có tính chu kỳ, bị ảnh hưởng lớn từ sinh hoạt giao thông ngày/đêm và có tương quan vật lý cực kỳ lớn với bụi PM10 cùng các khí đốt công nghiệp.
-- Mô hình Hồi quy tuyến tính tỏ ra rất hiệu quả trong bài toán này. Khẳng định có thể dùng thông số các loại khí cơ bản để dự báo sớm nồng độ PM2.5.
-
-**Hướng phát triển trong tương lai:**
-- Áp dụng các mô hình chuỗi thời gian như **LSTM (Deep Learning)** hoặc **ARIMA** để dùng nồng độ PM2.5 của 3 ngày trước dự đoán PM2.5 của ngày mai, qua đó xây dựng tính năng cảnh báo sức khỏe độc lập.
-- Tích hợp thêm các chỉ số Thời tiết (Nhiệt độ, Gió, Mưa) để thuật toán tính toán được hiện tượng "nước mưa rửa trôi bụi", giúp mô hình trở nên thực tế và gần với cơ chế tự nhiên nhất.
+- **Kết luận:** Đồ án đã triển khai thành công quy trình hồi quy dự báo PM2.5. So sánh chứng minh rằng trong dữ liệu tự nhiên như khí hậu, các sự kiện cực đoan (ngoại lai) chứa rất nhiều thông tin giá trị. Việc chọn đúng thuật toán (Random Forest) để tận dụng các nhiễu này mang lại hiệu quả dự đoán tốt hơn hẳn so với việc xóa bỏ chúng để ép vừa vào mô hình tuyến tính (Linear Regression).
+- **Hướng phát triển & Tính ứng dụng:** 
+  1. **Nâng cấp thuật toán:** Ứng dụng các kiến trúc mạng nơ-ron chuyên sâu cho chuỗi thời gian như **LSTM (Long Short-Term Memory)** hoặc **GRU** để khai thác hiệu quả hơn yếu tố trễ (lag) của nồng độ khói bụi theo thời gian thực.
+  2. **Mở rộng dữ liệu:** Bổ sung dữ liệu quan trắc từ các trạm lân cận nhằm thu thập thêm biến về xu hướng dịch chuyển không gian (Spatial dependencies) của luồng bụi.
+  3. **Khả năng ứng dụng thực tiễn tại Việt Nam:** Quy trình phân tích và mô hình Random Forest trong đồ án này hoàn toàn có thể được chuyển giao và huấn luyện lại bằng bộ dữ liệu đo lường không khí tại các siêu đô thị như Hà Nội hay TP.HCM. Tương tự như Bắc Kinh, Hà Nội cũng thường xuyên đối mặt với hiện tượng "sương mù quang hóa" và nghịch nhiệt mùa đông làm giam giữ bụi mịn ở tầm thấp. Việc tích hợp mô hình dự báo này với mạng lưới cảm biến môi trường (IoT) của thành phố sẽ cung cấp một giải pháp cảnh báo y tế sớm với độ tin cậy cao. Điều này giúp các cơ quan quản lý chủ động điều tiết giao thông và phát đi khuyến cáo kịp thời để người dân có biện pháp phòng vệ (hạn chế ra đường, sử dụng khẩu trang chuyên dụng, bật máy lọc không khí) trước khi những đợt không khí độc hại đạt "đỉnh điểm".
